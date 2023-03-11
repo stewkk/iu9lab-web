@@ -22,12 +22,11 @@ RUN apt-get install -y --allow-unauthenticated \
 
 RUN apt-get clean all
 
-RUN pip3 install yandex-taxi-testsuite[postgresql-binary]
-
-RUN useradd --create-home --no-user-group user
-USER user
-
-RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+RUN --mount=type=cache,src=~/.cache,target=/root/.cache \
+    pip3 install yandex-taxi-testsuite[postgresql-binary]
+RUN --mount=type=cache,src=~/go/pkg/mod,target=/go/pkg/mod \
+    --mount=type=cache,src=~/.cache,target=/root/.cache \
+    go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 
 EXPOSE 8080
 

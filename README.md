@@ -1,5 +1,7 @@
 # Online report generator *BMSTU IU9*
 
+tmp
+
 # Setup local development
 
 testsuite:

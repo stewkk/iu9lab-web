@@ -4,17 +4,11 @@ version: "2.3"
 services:
     iu9lab-container:
         image: stewkk/testsuite-golang
-        privileged: true
         environment: []
-        user: user
         volumes:
             - .:/iu9lab:rw
-            - go-modules:/go/pkg/mod
-            - go-cache:/home/user/.cache/go-build
+            - ~/go/pkg/mod:/go/pkg/mod
+            - ~/.cache/go-build:/root/.cache/go-build
         ports:
             - 8080:8080
         working_dir: /iu9lab
-
-volumes:
-    go-modules:
-    go-cache:

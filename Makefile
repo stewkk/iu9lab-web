@@ -25,8 +25,8 @@ codegen:
 	@oapi-codegen -package=api -generate=types openapi.yaml > internal/api/types.go
 	@oapi-codegen -package=api -generate=server openapi.yaml > internal/api/api.go
 
-test: utest
-	@PYTHONPATH=../.. $(PYTEST) $(PYTEST_ARGS) tests
+test: utest build
+	@PYTHONPATH=../.. TESTSUITE_ALLOW_ROOT=1 $(PYTEST) $(PYTEST_ARGS) tests
 
 utest:
 	@go test ./...
