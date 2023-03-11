@@ -22,10 +22,10 @@ RUN apt-get install -y --allow-unauthenticated \
 
 RUN apt-get clean all
 
-RUN --mount=type=cache,src=~/go/pkg/mod,target=/go/pkg/mod \
-    --mount=type=cache,src=~/.cache/go-build,target=/root/.cache/go-build \
+RUN --mount=type=cache,src=/var/cache/iu9lab-web/modules,target=/go/pkg/mod \
+    --mount=type=cache,src=/var/cache/iu9lab-web/build,target=/root/.cache/go-build \
     go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
-RUN --mount=type=cache,src=~/.cache,target=/root/.cache \
+RUN --mount=type=cache,src=/var/cacheiu9lab-web/pip,target=/root/.cache \
     pip3 install yandex-taxi-testsuite[postgresql-binary]
 
 EXPOSE 8080

@@ -7,8 +7,8 @@ services:
         environment: []
         volumes:
             - .:/iu9lab:rw
-            - ~/go/pkg/mod:/go/pkg/mod
-            - ~/.cache/go-build:/root/.cache/go-build
+            - /var/cache/iu9lab-web/modules:/go/pkg/mod
+            - /var/cache/iu9lab-web/go-build:/root/.cache/go-build
         ports:
             - 8080:8080
         working_dir: /iu9lab
