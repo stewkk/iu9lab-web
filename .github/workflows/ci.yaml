@@ -29,14 +29,21 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
-    - name: build
+    - name: cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+    - name: build dev image
       uses: docker/build-push-action@v4
       with:
+        context: .
         load: true
         tags: stewkk/testsuite-golang
-        context: .
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     - name: check if Dockerfile changed
       uses: dorny/paths-filter@v2
       id: filter
@@ -44,15 +51,14 @@ jobs:
         filters: |
           dev-dockerfile:
             - 'Dockerfile'
-    - name: push
-      if: steps.filter.outputs.dev-dockerfile == 'true'
-      uses: docker/build-push-action@v4
-      with:
-        push: true
-        tags: stewkk/testsuite-golang
-        context: .
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+    -
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      name: move cache
+      run: |
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
     - name: setup python
       uses: actions/setup-python@v3
     - name: run pre-commit checks
