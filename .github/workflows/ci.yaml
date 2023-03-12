@@ -35,8 +35,8 @@ jobs:
         load: true
         tags: stewkk/testsuite-golang
         context: .
-        # cache-from: type=gha,scope=${{GITHUB_REF_NAME}}-dev-image
-        # cache-to: type=gha,mode=max,scope=${{GITHUB_REF_NAME}}-dev-image
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     - name: check if Dockerfile changed
       uses: dorny/paths-filter@v2
       id: filter
@@ -51,8 +51,8 @@ jobs:
         push: true
         tags: stewkk/testsuite-golang
         context: .
-        # cache-from: type=gha,scope=$GITHUB_REF_NAME-dev-image
-        # cache-to: type=gha,mode=max,scope=$GITHUB_REF_NAME-dev-image
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     - name: setup python
       uses: actions/setup-python@v3
     - name: run pre-commit checks
