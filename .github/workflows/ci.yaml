@@ -20,23 +20,23 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    # - name: setup golang cache
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: |
-    #       /var/cache/iu9lab-web/build
-    #       /var/cache/iu9lab-web/modules
-    #     key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-golang-
+    - name: setup golang cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          /var/cache/iu9lab-web/build
+          /var/cache/iu9lab-web/modules
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
     - name: build
       uses: docker/build-push-action@v4
       with:
         load: true
         tags: stewkk/testsuite-golang
         context: .
-        cache-from: type=gha,scope=$GITHUB_REF_NAME-dev-image
-        cache-to: type=gha,mode=min,scope=$GITHUB_REF_NAME-dev-image
+        cache-from: type=gha,scope=${{GITHUB_REF_NAME}}-dev-image
+        cache-to: type=gha,mode=max,scope=${{GITHUB_REF_NAME}}-dev-image
     - name: check if Dockerfile changed
       uses: dorny/paths-filter@v2
       id: filter
