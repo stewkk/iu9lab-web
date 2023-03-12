@@ -51,6 +51,15 @@ jobs:
         filters: |
           dev-dockerfile:
             - 'Dockerfile'
+    - name: push dev image
+      if: steps.filter.outputs.dev-dockerfile == 'true'
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: stewkk/testsuite-golang
+        cache-from: type=local,src=/tmp/.buildx-cache-new
+        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     -
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
